@@ -5,6 +5,10 @@ on:
       - 'v*'
   workflow_dispatch:
 
+env:
+  REGISTRY: "ghcr.io/dolvladzio"
+  APP_NAME: "app-3"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,8 +39,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/dolvladzio/app-3:${{ steps.vars.outputs.VERSION }}
+          tags: ${{ env.REGISTRY }}/${{ env.APP_NAME }}:${{ steps.vars.outputs.VERSION }}
 
       - name: Check pushed image
         run: |
-          docker manifest inspect ghcr.io/dolvladzio/app-3:${{ steps.vars.outputs.VERSION }}
+          docker manifest inspect ${{ env.REGISTRY }}/${{ env.APP_NAME }}:${{ steps.vars.outputs.VERSION }}
