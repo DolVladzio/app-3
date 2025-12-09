@@ -1,0 +1,22 @@
+name: Hot Fix
+on:
+  push:
+    branches:
+      - 'hot-fix*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag to build'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  trigger-reusable-workflow:
+    uses: DolVladzio/release-rollback-repo/.github/workflows/hot-fix.yaml@main
+    with:
+      version: ${{ inputs.VERSION }}
+      app-name: ${{ github.event.repository.name }}
