@@ -5,6 +5,10 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write 
+
 jobs:
   trigger-reusable-workflow:
     uses: DolVladzio/release-rollback-repo/.github/workflows/build-images.yaml@main
