@@ -9,6 +9,13 @@ on:
         description: 'Version tag to build'
         required: true
         type: string
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - prod
 
 permissions:
   contents: read
@@ -20,3 +27,4 @@ jobs:
     with:
       version: ${{ inputs.VERSION }}
       app-name: ${{ github.event.repository.name }}
+      environment: ${{ inputs.ENVIRONMENT }}
