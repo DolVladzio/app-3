@@ -1,4 +1,4 @@
-name: Hot Fix
+name: Hot Fix App-3
 on:
   push:
     branches:
@@ -9,6 +9,7 @@ on:
         description: 'Version tag to build'
         required: true
         type: string
+        default: 'hot-fix-2025-01-01'
       environment:
         description: 'Environment to deploy to'
         required: true
@@ -16,15 +17,22 @@ on:
         options:
           - dev
           - prod
+        default: 'prod'
 
 permissions:
   contents: read
   packages: write
 
 jobs:
-  trigger-reusable-workflow:
-    uses: DolVladzio/release-rollback-repo/.github/workflows/hot-fix.yaml@main
+  trigger-build-images-workflow:
+    uses: DolVladzio/release-rollback-repo/.github/workflows/build-images.yaml@main
     with:
       version: ${{ inputs.VERSION }}
       app-name: ${{ github.event.repository.name }}
-      environment: ${{ inputs.ENVIRONMENT }}
+
+  trigger-deploy-charts-workflow:
+    needs: trigger-build-images-workflow
+    uses: DolVladzio/app-charts/.github/workflows/charts.yaml@main
+    with:
+      version: ${{ inputs.VERSION }}
+      environment: ${{ inputs.environment }}
